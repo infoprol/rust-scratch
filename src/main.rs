@@ -3,8 +3,13 @@ pub mod priority_heap;
 
 use priority_heap::PriorityQueue;
 
+pub mod scratch;
+use scratch::MyBox;
 
-fn main () {
+pub mod bst;
+
+
+fn q() {
 
     for j in 0 .. 17 {
         let (x,y) = PriorityQueue::<String>::children(j as usize);
@@ -32,4 +37,22 @@ fn main () {
         print!("POP {}\n", x.elem);
     }
 
+}
+
+fn main() {
+    box_stuff();
+}
+
+
+fn hello(name: &str) {
+    println!("hello, {}!", name);
+}
+
+fn box_stuff() {
+    let x = MyBox::new(String::from("zaphod"));
+    hello(&x);
+
+    let y = &(*x)[..];
+
+    assert_eq!(&(*x), y);
 }
