@@ -1,35 +1,29 @@
 
-use std::rc::Rc;
 
-type Link<T: Ord> = Option<Rc<Node<T>>>;
-pub struct List<T: Ord> {
-    head: Link<T>,
-}
-struct Node<T: Ord> {
-    elem: T,
-    next: Link<T>,
-}
+pub enum LList {
+    LNode {
+        val:    i32,
+        next:   Box<LList>, },
+    Nil, }
 
 
-impl<T: Ord> List<T: Ord> {
-    pub fn new() -> Self {
-        List { head: None }
-    }
+impl LList {
+    fn new () -> Self { LList::Nil }
 
-    pub fn insert(&mut self, elem: T) {
-        
-        if let Some(h) = self.head {
-
-            let mut 
-
-
+    fn insert(&mut self, new_val: i32) {
+        match self {
+            LList::LNode {
+                ref val,
+                ref mut next,
+            } if new_val >= *val => {
+                print!("val={}\tnew_valval={}\n", val, new_val);
+                if new_val >= *val {
+                    print!("new val {} >= val of {}; recursing...\n", new_val, val);
+                    next.insert(new_val);
+                }
+            },
+            xx => { print!("argg"); },
         }
-        else {
-            self.head = Some(Rc::new(Node {
-                elem: elem,
-                next: None
-            }));
-        }
-        
     }
 }
+

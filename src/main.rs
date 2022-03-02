@@ -8,6 +8,9 @@ use scratch::MyBox;
 
 pub mod bst;
 
+pub mod ll;
+use ll::LList;
+
 
 fn q() {
 
