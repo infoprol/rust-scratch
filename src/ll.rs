@@ -70,9 +70,13 @@ pub struct LNode {
     val: i32,
     next: LLink,
 }
+pub struct LList {
+    head: LLink,
+}
 
 impl LNode {
     fn insert(&mut self, val: i32) {
+
         match self.next {
             None => self.next = Some(Box::new(LNode { val: val, next: None })),
             Some(ref mut node) => {
@@ -93,6 +97,27 @@ impl LNode {
         else { print!("//\n"); }
     }
 }
+
+impl LList {
+    fn new() -> Self { LList { head: None } }
+    fn insert(&mut self, val: i32) {
+        if let Some(mut node) = self.head.as_ref() {
+            if val < node.val {
+                let new_node = LNode { val: val, next: None };
+                self.head = Some(Box::new(new_node));
+                
+            //node.insert(val);
+        }
+        else {
+            self.head = Some(Box::new(LNode {
+                val: val,
+                next: None
+            }));
+        }
+    
+    }
+}
+
 
 
 pub fn ll_scratch() {
