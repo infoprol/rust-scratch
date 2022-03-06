@@ -107,6 +107,7 @@ impl LList {
                 self.head = Some(Box::new(new_node));
                 
             //node.insert(val);
+            }
         }
         else {
             self.head = Some(Box::new(LNode {
@@ -139,51 +140,3 @@ pub fn ll_scratch() {
 
 
 
-
-
-
-
-
-
-
-pub struct LIter<'a> {
-    next: Option<&'a LNode>,
-}
-
-/*
-impl<'a, i32> Iterator for LIter<'a> {
-    type Item = &'i32;
-    fn next(&'a mut self) -> Option<Self::Item> {
-        self.next.map(|n| {
-            let val = n.val;
-            self.next = n.next;
-            &val
-        })
-    }
-}
-*/
-
-
-
-/*
-impl LList {
-    fn new () -> Self { LList::Nil }
-
-    fn insert(&mut self, new_val: i32) {
-        match self {
-            LList::LNode {
-                ref val,
-                ref mut next,
-            } if new_val >= *val => {
-                print!("val={}\tnew_valval={}\n", val, new_val);
-                if new_val >= *val {
-                    print!("new val {} >= val of {}; recursing...\n", new_val, val);
-                    next.insert(new_val);
-                }
-            },
-            xx => { print!("argg"); },
-        }
-    }
-}
-
-*/
