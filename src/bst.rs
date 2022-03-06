@@ -3,6 +3,9 @@
 */
 
 
+use std::rc::Rc;
+use std::cell::RefCell;
+
 pub struct Bst<T: Ord> { root: Link<T>, }
 //type Node<T> = Option<Rc<Node<T>>>;
 type Link<T> = Option<Box<Node<T>>>;
@@ -22,6 +25,23 @@ impl<T> Node<T> {
         }
     }
 }
+
+type TLink = Option<RefCell<Rc<TNode>>>;
+struct TNode {
+    elem: i32,
+    left: TLink,
+    right: TLink,
+}
+
+pub fn bst_scratch() {
+
+}
+
+
+
+
+
+
 
 impl<T: Ord> Bst<T> {
     pub fn new() -> Self {

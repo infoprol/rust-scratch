@@ -10,6 +10,7 @@ pub mod bst;
 
 pub mod ll;
 use ll::LList;
+use ll::ll_scratch;
 
 pub mod quick;
 
@@ -49,9 +50,11 @@ fn q() {
 }
 
 fn main() {
-    box_stuff();
 
-    quick::sort_quickly();
+    ll_scratch();
+    //box_stuff();
+
+    //quick::sort_quickly();
 }
 
 
