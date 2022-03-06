@@ -9,7 +9,7 @@ use scratch::MyBox;
 pub mod bst;
 
 pub mod ll;
-use ll::LList;
+use ll::LNode;
 use ll::ll_scratch;
 
 pub mod quick;

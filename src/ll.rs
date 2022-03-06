@@ -14,7 +14,7 @@ struct ListNode {
 }
 
 
-pub fn ll_scratch() {
+pub fn ll_scratchxx() {
 
     let mut one = ListNode { elem: 1, next: None };
     let mut two = ListNode { elem: 2, next: None };
@@ -33,7 +33,7 @@ pub fn ll_scratch() {
     let mut curr = head.as_ref().map(|x| x.clone());
     while let Some(curr) = curr.as_ref().map(|x| x.next.clone()) {
         if let Some(val) = curr.as_ref().map(|x| x.elem) {
-            print!("curr.elem = {}", val);
+            print!("curr.elem = {}\n", val);
         }
     }
 
@@ -63,15 +63,84 @@ pub fn ll_scratch() {
 
 
 
+//////
+/// this seems to work
+pub type LLink = Option<Box<LNode>>;
+pub struct LNode {
+    val: i32,
+    next: LLink,
+}
+
+impl LNode {
+    fn insert(&mut self, val: i32) {
+        match self.next {
+            None => self.next = Some(Box::new(LNode { val: val, next: None })),
+            Some(ref mut node) => {
+                if val < node.val {
+                    let new_node = LNode { val: val, next: self.next.take() };
+                    self.next = Some(Box::new(new_node));
+                }
+                else {
+                    node.insert(val);
+                }
+            }
+        }
+    }
+
+    fn traverse(&self) {
+        print!("{} -> ", self.val);
+        if let Some(ref node) = self.next { node.traverse(); }
+        else { print!("//\n"); }
+    }
+}
 
 
-pub enum LList {
-    LNode {
-        val:    i32,
-        next:   Box<LList>, },
-    Nil, }
+pub fn ll_scratch() {
+    let mut head = LNode { val: 17, next: None };
+    head.insert(11);
+    head.insert(1);
+    head.insert(100);
+    head.insert(3);
+    head.insert(5);
+    head.insert(2);
+    head.insert(7);
+
+    print!("traversing list...\n");
+    head.traverse();
+}
 
 
+
+
+
+
+
+
+
+
+
+
+
+pub struct LIter<'a> {
+    next: Option<&'a LNode>,
+}
+
+/*
+impl<'a, i32> Iterator for LIter<'a> {
+    type Item = &'i32;
+    fn next(&'a mut self) -> Option<Self::Item> {
+        self.next.map(|n| {
+            let val = n.val;
+            self.next = n.next;
+            &val
+        })
+    }
+}
+*/
+
+
+
+/*
 impl LList {
     fn new () -> Self { LList::Nil }
 
@@ -92,3 +161,4 @@ impl LList {
     }
 }
 
+*/
