@@ -4,8 +4,54 @@ use std::rc::Rc;
 use std::cell::RefCell;
 
 
-type ListLink = Option<Rc<ListNode>>;
 
+type NodeLink = Option<Rc<RefCell<LLLNode>>>;
+struct LLLNode {
+    elem: i32,
+    next: NodeLink,
+}
+
+
+pub fn ll_scratch() {
+    let mut twenty = LLLNode { elem: 20, next: None };
+    let mut ten = LLLNode { elem: 10, next: Some(Rc::new(RefCell::new(
+        twenty
+    ))) };
+    let mut one = LLLNode { elem: 1, next: Some(Rc::new(RefCell::new(
+        ten
+    ))) };
+
+
+    
+    let link_to_ten = (&one).next.as_ref().map(|t| Rc::clone(&t));
+    one.next = Some(Rc::new(RefCell::new(LLLNode {
+        elem: 5,
+        next: link_to_ten,
+    })));
+
+    let mut head = Some(Rc::new(RefCell::new(one)));
+    
+    let mut curr = head.map(|x| Rc::clone(&x));
+    //while let Some(curr) = curr {
+    loop {
+        match curr {
+            Some(n) => {
+                let c = n.borrow();
+                print!("{}\n", c.elem);
+                curr = c.next.as_ref().map(|x| Rc::clone(&x));
+            },
+            None => { break; }
+        }
+    }
+
+}
+
+
+
+
+
+
+type ListLink = Option<Rc<ListNode>>;
 
 #[derive(Debug)]
 struct ListNode {
@@ -55,11 +101,6 @@ pub fn ll_scratchxx() {
 
 
 }
-
-
-
-
-
 
 
 
@@ -121,7 +162,7 @@ impl LList {
 
 
 
-pub fn ll_scratch() {
+pub fn ll_scratchyyy() {
     let mut head = LNode { val: 17, next: None };
     head.insert(11);
     head.insert(1);
