@@ -5,14 +5,105 @@ use std::cell::RefCell;
 
 
 
-type NodeLink = Option<Rc<RefCell<LLLNode>>>;
-struct LLLNode {
+type NodeLink = Rc<RefCell<LLLNode>>;
+pub struct LLLNode {
     elem: i32,
-    next: NodeLink,
+    next: Option<NodeLink>,
+}
+pub struct LLList {
+    head: Option<NodeLink>,
+}
+
+impl LLList {
+    pub fn new() -> Self { LLList { head: None, }}
+
+    pub fn insert(&mut self, val: i32) {
+        let mut new_node = Rc::new(RefCell::new(LLLNode {
+            elem: val,
+            next: None,
+        }));
+
+
+        match &self.head {
+            None => {
+                self.head = Some(Rc::clone(&new_node));
+            },
+            Some(node_link) => {
+                let mut curr = Some(Rc::clone(&node_link));
+                let mut prev = self.head.as_ref().map(|x| Rc::clone(&x));
+                loop {
+                    match curr {
+                        Some(nl) => {
+                            let c = nl.borrow();
+                    
+                            if val < c.elem {
+                                let new_node = LLLNode {
+                                    elem: val,
+                                    next: Some(Rc::clone(&nl)),
+                                };
+                                prev.map(|x| { x.borrow_mut().next = Some(Rc::new(RefCell::new(new_node))); });
+                                //(*nl.borrow_mut()).next = Some(Rc::new(RefCell::new(new_node)));
+                            }
+                            
+                            //prev = curr;
+                            prev = Some(Rc::clone(&nl));
+                            curr = c.next.as_ref().map(|x| Rc::clone(&x));
+                        },
+                        None => { break; }
+
+
+                    }                    
+                }
+            }
+        }
+    }
+
+    pub fn traverse(&self) {
+        let mut curr = self.head.as_ref().map(|x| Rc::clone(&x));
+        loop {
+            match curr {
+                None => {
+                    print!("//\n");
+                    break;
+                },
+                Some(node_link) => {
+                    print!("{} -> ", node_link.borrow().elem);
+                    curr = node_link.borrow().next.as_ref().map(|x| Rc::clone(&x));
+                }
+            }
+        }
+    }
+
 }
 
 
+
+
 pub fn ll_scratch() {
+    let mut ll = LLList::new();
+    ll.insert(11);
+    ll.insert(1);
+    ll.insert(100);
+    ll.insert(3);
+    ll.insert(5);
+    ll.insert(2);
+    ll.insert(7);
+
+    print!("traversing list...\n");
+    ll.traverse();
+}
+
+
+
+
+
+
+
+
+
+
+
+pub fn ll_scratchaaaa() {
     let mut twenty = LLLNode { elem: 20, next: None };
     let mut ten = LLLNode { elem: 10, next: Some(Rc::new(RefCell::new(
         twenty
@@ -45,10 +136,6 @@ pub fn ll_scratch() {
     }
 
 }
-
-
-
-
 
 
 type ListLink = Option<Rc<ListNode>>;

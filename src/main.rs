@@ -14,6 +14,9 @@ use ll::ll_scratch;
 
 pub mod quick;
 
+pub mod linkedlist;
+use linkedlist::LList;
+use linkedlist::do_ll;
 
 
 
@@ -51,7 +54,8 @@ fn q() {
 
 fn main() {
 
-    ll_scratch();
+    do_ll();
+    //ll_scratch();
     //box_stuff();
 
     //quick::sort_quickly();
