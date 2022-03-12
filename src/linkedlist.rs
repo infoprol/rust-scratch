@@ -87,7 +87,42 @@ impl LList {
             }
         }
     }
+
+    pub fn iter(self) -> Iter {
+        Iter(self.head.as_ref().map(|x| Rc::clone(&x)))
+    }
 }
+
+
+
+pub struct Iter(Option<LLink>);
+impl Iterator for Iter {
+    type Item = i32;
+    fn next(&mut self) -> Option<i32> {
+        match &self.0.take() {
+            None => { return None; },
+            Some(lnk) => {
+                let ans = lnk.borrow().elem;
+                self.0 = lnk.borrow().next.as_ref().map(
+                    |x| Rc::clone(x)
+                );
+                return Some(ans);
+            }
+        }
+    }
+}
+
+
+
+
+/*
+impl Drop for LList {
+    fn drop(&mut self) {
+    }
+}
+*/
+
+
 
 pub fn do_ll() {
     let mut ll = LList::new();
@@ -99,4 +134,17 @@ pub fn do_ll() {
     ll.insert(7);
 
     ll.traverse();
+
+    let mut jj = LList::new();
+
+    print!("first itering:\n");
+    for j in ll.iter() {
+        print!("{}\n", j);
+        jj.insert(j);
+    }
+
+    print!("second itering:\n");
+    for j in jj.iter() {
+        print!("{}\n", j);
+    }
 }
