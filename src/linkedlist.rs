@@ -25,6 +25,57 @@ impl LList {
     pub fn new() -> Self { LList { head: None, } }
 
 
+    pub fn remove(&mut self, elem: i32) {
+        match self.head.take() {
+            None => {
+                print!("trying to delete {} from an empty list!\n", elem);
+                //need to put head back??
+                self.head = None;
+            },
+            Some(n) if elem == n.borrow().elem => {
+                print!("removing {} from the head of the list!\n", elem);
+                self.head = n.borrow().next.as_ref().map(|x| Rc::clone(&x));
+            },
+            Some(n) => {
+                self.head = Some(Rc::clone(&n));
+                let mut curr = Rc::clone(&n);
+                loop {
+
+                    let mut next = curr.borrow().next.as_ref().map(|x| Rc::clone(&x));
+                    match next.take() {
+                        None => {
+                            print!("got to the end of the list without finding {} to remove!\n", elem);
+                            //replace next?
+                            curr.borrow_mut().next = None;
+                            break;
+                        },
+                        Some(m) if elem == m.borrow().elem => {
+                            print!("ha!  found {} and am removing it from middle of list!\n", elem);
+                            curr.borrow_mut().next = m.borrow().next.as_ref().map(|x| Rc::clone(&x));
+                            //keep iterating (might be duplicates)
+                        },
+                        Some(m) if elem < m.borrow().elem => {
+                            print!("we are past where {} would be, so terminating!\n", elem);
+                            //replace next?
+                            curr.borrow_mut().next = Some(Rc::clone(&m));
+                            break;
+                        },
+                        //else keep chugging along...
+                        Some(m) => {
+                            print!("still looking for {}...\n", elem);
+                            //restore next?
+                            curr.borrow_mut().next = Some(Rc::clone(&m));
+                            curr = Rc::clone(&m);
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+
+
     pub fn insert(&mut self, elem: i32) {
         let new_node = LNode::new(elem);
         match self.head.take() {
@@ -139,12 +190,24 @@ pub fn do_ll() {
 
     print!("first itering:\n");
     for j in ll.iter() {
-        print!("{}\n", j);
+        print!("ll:{}\n", j);
         jj.insert(j);
     }
 
+    let mut mm = LList::new();
     print!("second itering:\n");
     for j in jj.iter() {
-        print!("{}\n", j);
+        print!("j:{}\n", j);
+        mm.insert(j);
     }
+
+    mm.remove(12);
+    mm.remove(100);
+    print!("after removing 12 and 100:\n");
+    mm.traverse();
+    jj = LList::new();
+
+
+
+
 }
