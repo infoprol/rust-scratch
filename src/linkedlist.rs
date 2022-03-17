@@ -24,6 +24,16 @@ impl LNode {
 impl LList {
     pub fn new() -> Self { LList { head: None, } }
 
+    pub fn size(&self) -> usize {
+        let mut L = 0;
+        let mut curr = self.head.as_ref().map(|x| Rc::clone(x));
+        while let Some(n) = curr {
+            L = L + 1;
+            curr = n.borrow().next.as_ref().map(|x| Rc::clone(x));
+        }
+        return L as usize;
+    }
+
 
     pub fn remove(&mut self, elem: i32) {
         match self.head.take() {
@@ -201,11 +211,13 @@ pub fn do_ll() {
         mm.insert(j);
     }
 
+    mm.traverse();
+    print!("size of mm: {}\n", mm.size());
     mm.remove(12);
     mm.remove(100);
     print!("after removing 12 and 100:\n");
     mm.traverse();
-    jj = LList::new();
+    print!("size of mm: {}\n", mm.size());
 
 
 
