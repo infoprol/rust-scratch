@@ -6,7 +6,7 @@ use priority_heap::PriorityQueue;
 pub mod scratch;
 use scratch::MyBox;
 
-pub mod bst;
+pub mod binarysearchtree;
 
 pub mod ll;
 use ll::LNode;
