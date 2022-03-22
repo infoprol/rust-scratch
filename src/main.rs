@@ -7,6 +7,9 @@ pub mod scratch;
 use scratch::MyBox;
 
 pub mod binarysearchtree;
+use binarysearchtree::Bst;
+use binarysearchtree::TNode;    
+use binarysearchtree::do_bst;
 
 pub mod ll;
 use ll::LNode;
@@ -54,7 +57,8 @@ fn q() {
 
 fn main() {
 
-    do_ll();
+    do_bst();
+    //do_ll();
     //ll_scratch();
     //box_stuff();
 

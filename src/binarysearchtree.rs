@@ -32,47 +32,113 @@ impl Bst {
         Bst { root: None }
     }
 
+
+    pub fn inorder(&self) {
+        Bst::_inorder(&self.root);
+    }
+
+    pub fn _inorder(curr: &Option<Rc<RefCell<TNode>>>) {
+        if let Some(ref link) = curr {
+            let left  = link.borrow().left.as_ref().map(|x| x.clone());
+            let right = link.borrow().right.as_ref().map(|x| x.clone());
+
+            Bst::_inorder(&left);
+            print!(" {} ", &link.borrow().val);
+            Bst::_inorder(&right);
+        }
+    }
+
     pub fn insert(&mut self, val: i32) {
-        let new_node = Bst::new_link(val);
+        //let new_node = Bst::new_link(val);
 
         match self.root.take() {
-            Nothing => {
-                self.root = Some(new_node);
+            None => {
+                print!("empty tree - gets first val of {}!\n", &val);
+                self.root = Some(Bst::new_link(val));
             },
             Some(root) => {
-                let mut curr = root.clone();
+                print!("non-empty list, inserting val of {}...\n", &val);
+                let mut curr_wrapped = Some(root.clone());
 
                 //restore root
                 self.root = Some(root);
 
-                loop {
-
-                    match val.cmp(&curr.borrow().val) {
+                while let Some(curr) = curr_wrapped {
+                    print!("comparing {} to {}\n", &val, &curr.borrow().val);
+                    let ans = val.cmp(&curr.borrow().val);
+                    match ans {
                         Ordering::Less => {
-                                
-                            match curr.borrow().left.as_ref().map(|x| x.clone()) {
-                                None => {
-                                    curr.borrow_mut().left = Some(Bst::new_link(val));
-                                    break;
-                                },
-                                Some(n) => {
-                                    
-                                    let m = n.clone();  
-                                    curr.borrow_mut().left = Some(n);
-                                    curr.borrow().left.as_ref().map(|x| x.clone());
-                                },
+                            print!("\tit is LESS!\n");
+                            if let Some(n) = curr.borrow().left.as_ref().map(|x| x.clone()) {
+                                print!("\tleft tree is NOT NULL. recursing...\n");
+                                curr_wrapped = Some(n);
+                                continue;
                             }
+
+                            print!("\tleft subtree is null.  inserting {} here!\n", &val);
+                            curr.borrow_mut().left = Some(Bst::new_link(val));
+                            break;
                         },
-                        Ordering::Equal | Ordering::Greater => {}
-                        ,
-                    }
+                        Ordering::Equal | Ordering::Greater => {
+                            print!("\tit is EQUAL or GREATER!\n");
+                            if let Some(n)= curr.borrow().right.as_ref().map(|x| x.clone()) {
+                                print!("\tright tree is NOT NULL. recursing...\n");
+                                curr_wrapped = Some(n);
+                                continue;
+                            }
 
+                            print!("\tright subtree is null.  inserting {} here!\n", &val);
+                            curr.borrow_mut().right = Some(Bst::new_link(val));
+                            break;
+                        },
+                    } //match val.cmp(..)
 
-                } //loop
+                } //while
 
             } //Some(root)
         } //match
-
     } //insert
 
 } //impl
+
+
+
+
+pub struct InorderIter(Option<Link>);
+impl InorderIter {
+    
+}
+
+impl Iterator for InorderIter {
+    type Item = i32;
+    
+    fn next(&mut self) -> Option<i32> {
+
+
+
+
+        None
+    }
+
+}
+
+
+
+
+
+
+
+
+pub fn do_bst() {
+    
+    let mut bst = Bst::new();
+
+    for x in vec![42, 12, 30, 44, 1000, -5] {
+        bst.insert(x);
+    }
+    
+    print!("\n\ninorder:\n\t");
+    bst.inorder();
+    print!("\n\n");
+
+}
